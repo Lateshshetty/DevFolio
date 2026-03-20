@@ -1,4 +1,5 @@
 FROM eclipse-temurin:21-jdk
+
 WORKDIR /app
 
 COPY . .
@@ -6,4 +7,6 @@ COPY . .
 RUN chmod +x mvnw
 RUN ./mvnw clean package -DskipTests
 
-CMD ["java", "-jar", "target/*.jar"]
+EXPOSE 8080
+
+CMD ["java", "-jar", "target/Ask-us-0.0.1-SNAPSHOT.jar"]
