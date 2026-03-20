@@ -1,0 +1,10 @@
+# frontend
+frontend/node_modules
+frontend/dist
+frontend/.env
+
+# backend
+backend/target
+backend/*.log
+backend/.env
+backend/application.properties
