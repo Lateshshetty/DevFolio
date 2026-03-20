@@ -33,9 +33,8 @@ public class SecurityFilter {
                         .userInfoEndpoint(userInfo ->
                                 userInfo.userService(customOAuth2UserService)
                         )
-
-                        .defaultSuccessUrl("http://localhost:5173/dashboard", true)
-                        .failureUrl("http://localhost:5173/login?error=true")
+                        .defaultSuccessUrl("https://devfolio-latesh.vercel.app/dashboard", true)
+                        .failureUrl("https://devfolio-latesh.vercel.app/login?error=true")
                 )
                 .logout(log -> log
                         .logoutUrl("/logout")
@@ -52,7 +51,7 @@ public class SecurityFilter {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:5173"));
+        config.setAllowedOrigins(List.of("http://localhost:5173","https://devfolio-latesh.vercel.app/"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true); // required for session cookies
