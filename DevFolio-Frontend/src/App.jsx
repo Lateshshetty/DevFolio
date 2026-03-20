@@ -17,6 +17,7 @@ const T = {
    or "http://localhost:8080" for local dev.
 ══════════════════════════════════════════ */
 const BASE = import.meta.env.VITE_API_BASE;
+const RAZORPAY_KEY = import.meta.env.VITE_RAZORPAY_KEY;
 const api = {
   // ── Auth (redirects to Spring Security OAuth2)
   loginGithub: () => { window.location.href = `${BASE}/oauth2/authorization/github`; },
@@ -2136,7 +2137,7 @@ const initiateRazorpayPayment = (amount, userDetails, onSuccess, onFailure) => {
   }
 
   const options = {
-    key: 'rzp_test_SSCEXW9undA3To',
+    key: RAZORPAY_KEY,
     amount: amount * 100,
     currency: 'INR',
     name: 'DevFolio',
