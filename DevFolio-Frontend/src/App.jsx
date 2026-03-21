@@ -367,7 +367,7 @@ function Landing({go}){
               <div style={{textAlign:"center",marginBottom:12}}>
                 <Avatar name="Aryan Mehta" size={50}/>
                 <div style={{fontFamily:"Syne,sans-serif",fontWeight:800,fontSize:14,marginTop:8}}>Aryan Mehta</div>
-                <div style={{fontSize:9,color:T.subtle,marginTop:2}}>devfolio.app/u/aryan-m42</div>
+                <div style={{fontSize:9,color:T.subtle,marginTop:2}}>devfolio-latesh.vercel.app/u/aryan-m42</div>
               </div>
               <div style={{display:"flex",flexWrap:"wrap",gap:4,justifyContent:"center",marginBottom:11}}>
                 {["React","Java","MongoDB"].map(t=><span key={t} className="tag" style={{fontSize:9,padding:"3px 8px"}}>{t}</span>)}
@@ -397,7 +397,7 @@ function Landing({go}){
       <div style={{borderTop:`1.5px solid ${T.black}`,borderBottom:`1.5px solid ${T.black}`,padding:"10px 0",background:T.black,overflow:"hidden"}}>
         <div style={{display:"flex",gap:32,whiteSpace:"nowrap",color:T.cream,fontSize:10,fontWeight:600,letterSpacing:".08em",opacity:.45}}>
           {Array(8).fill(["aryan-m42","priya-d99","kiran-x07","dev-z55","rahul-k03","amie-v12"]).flat().map((s,i)=>(
-            <span key={i}>devfolio.app/u/{s}</span>
+            <span key={i}>devfolio-latesh.vercel.app/u/{s}</span>
           ))}
         </div>
       </div>
@@ -563,7 +563,7 @@ function SamuraiLayout({p,projects,stats,statsLoading,socials,go,loggedIn,DEMO_S
         <button onClick={()=>go(loggedIn?"dashboard":"landing")} style={{background:"none",border:"2px solid #8b0000",borderRadius:4,padding:"5px 14px",cursor:"none",color:"#8b0000",fontFamily:"SERIF",fontSize:12,fontWeight:700,letterSpacing:1}}>← 戻る</button>
         <div style={{display:"flex",alignItems:"center",gap:8,fontSize:11,color:"#5c3a1e"}}>
           <span style={{fontSize:16}}>⛩</span>
-          <span style={{letterSpacing:1}}>devfolio.app/u/{DEMO_SLUG}</span>
+          <span style={{letterSpacing:1}}>devfolio-latesh.vercel.app/u/{DEMO_SLUG}</span>
         </div>
         <button onClick={()=>{navigator.clipboard.writeText(`${window.location.origin}/u/${DEMO_SLUG}`).catch(()=>{});setCopied(true);setTimeout(()=>setCopied(false),2000);}} style={{background:"#8b0000",border:"none",borderRadius:4,padding:"5px 14px",cursor:"none",color:"#ffd700",fontFamily:"SERIF",fontSize:12,fontWeight:700}}>
           {copied?"✓ 完了":"リンクをコピー"}
@@ -861,7 +861,7 @@ function Portfolio({go, slug, loggedIn=false}){
   const NavBar = ({children, style={}}) => (
     <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"11px 18px",position:"sticky",top:0,zIndex:50,...style}}>
       <button onClick={()=>go(loggedIn?"dashboard":"landing")} style={{background:"none",border:`1.5px solid ${TH.accent}`,borderRadius:8,padding:"5px 12px",cursor:"pointer",color:TH.accent,fontFamily:TH.font,fontSize:12,fontWeight:600}}>← Back</button>
-      <span style={{fontSize:11,color:TH.subtle,fontWeight:600}}>devfolio.app/u/{DEMO_SLUG}</span>
+      <span style={{fontSize:11,color:TH.subtle,fontWeight:600}}>devfolio-latesh.vercel.app/u/{DEMO_SLUG}</span>
       <button onClick={()=>{navigator.clipboard.writeText(`${window.location.origin}/u/${DEMO_SLUG}`).catch(()=>{});setCopied(true);setTimeout(()=>setCopied(false),2000);}} style={{background:TH.accent,border:"none",borderRadius:8,padding:"5px 12px",cursor:"pointer",color:"#fff",fontFamily:TH.font,fontSize:12,fontWeight:600}}>{copied?"✓":"Copy"}</button>
       {children}
     </div>
@@ -877,7 +877,7 @@ function Portfolio({go, slug, loggedIn=false}){
       </div>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"11px 18px",background:"rgba(255,255,255,0.92)",borderBottom:"3px solid #ef4444",position:"sticky",top:0,zIndex:50,backdropFilter:"blur(10px)"}}>
         <button onClick={()=>go(loggedIn?"dashboard":"landing")} style={{background:"none",border:"2px solid #ef4444",borderRadius:8,padding:"5px 12px",cursor:"pointer",color:"#ef4444",fontFamily:TH.font,fontSize:11,fontWeight:700}}>← Back</button>
-        <div style={{display:"flex",alignItems:"center",gap:5}}><span>🎮</span><span style={{fontWeight:800,fontSize:11,color:"#1e3a5f"}}>devfolio.app/u/{DEMO_SLUG}</span></div>
+        <div style={{display:"flex",alignItems:"center",gap:5}}><span>🎮</span><span style={{fontWeight:800,fontSize:11,color:"#1e3a5f"}}>devfolio-latesh.vercel.app/u/{DEMO_SLUG}</span></div>
         <button onClick={()=>{navigator.clipboard.writeText(`${window.location.origin}/u/${DEMO_SLUG}`).catch(()=>{});setCopied(true);setTimeout(()=>setCopied(false),2000);}} style={{background:"#ef4444",border:"none",borderRadius:8,padding:"5px 12px",cursor:"pointer",color:"#fff",fontFamily:TH.font,fontSize:11,fontWeight:700}}>{copied?"✓ Got it!":"Copy"}</button>
       </div>
       <div style={{maxWidth:680,margin:"0 auto",padding:"24px 16px 80px",position:"relative",zIndex:1}}>
@@ -980,7 +980,7 @@ function Portfolio({go, slug, loggedIn=false}){
     <div style={{minHeight:"100vh",background:TH.bg,fontFamily:"'Inter',sans-serif",color:TH.text}}>
       <div style={{background:TH.nav,borderBottom:`1px solid ${TH.navBorder}`,padding:"12px 20px",position:"sticky",top:0,zIndex:50,display:"flex",justifyContent:"space-between",alignItems:"center"}}>
         <button onClick={()=>go(loggedIn?"dashboard":"landing")} style={{background:"none",border:`1px solid ${TH.border}`,borderRadius:6,padding:"5px 12px",cursor:"pointer",color:TH.text,fontFamily:"'Inter',sans-serif",fontSize:12}}>← Back</button>
-        <span style={{fontSize:11,color:TH.subtle,fontFamily:"'JetBrains Mono',monospace"}}>devfolio.app/u/{DEMO_SLUG}</span>
+        <span style={{fontSize:11,color:TH.subtle,fontFamily:"'JetBrains Mono',monospace"}}>devfolio-latesh.vercel.app/u/{DEMO_SLUG}</span>
         <button onClick={()=>{navigator.clipboard.writeText(`${window.location.origin}/u/${DEMO_SLUG}`).catch(()=>{});setCopied(true);setTimeout(()=>setCopied(false),2000);}} style={{background:TH.accent,border:"none",borderRadius:6,padding:"5px 12px",cursor:"pointer",color:"#fff",fontSize:12,fontWeight:600}}>{copied?"✓ Copied":"Copy link"}</button>
       </div>
       <div style={{maxWidth:1100,margin:"0 auto",padding:"28px 20px 80px",display:"grid",gridTemplateColumns:"260px 1fr",gap:24}}>
@@ -1102,7 +1102,7 @@ function Portfolio({go, slug, loggedIn=false}){
       </div>
       <div style={{background:"rgba(255,255,255,0.8)",borderBottom:`2px solid ${TH.navBorder}`,padding:"12px 22px",position:"sticky",top:0,zIndex:50,backdropFilter:"blur(12px)",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
         <button onClick={()=>go(loggedIn?"dashboard":"landing")} style={{background:"none",border:`1.5px solid ${TH.accent}`,borderRadius:20,padding:"5px 14px",cursor:"pointer",color:TH.accent,fontFamily:"Georgia,serif",fontSize:12}}>← Back</button>
-        <div style={{display:"flex",alignItems:"center",gap:7}}><span>🌿</span><span style={{fontSize:11,color:TH.subtle}}>devfolio.app/u/{DEMO_SLUG}</span></div>
+        <div style={{display:"flex",alignItems:"center",gap:7}}><span>🌿</span><span style={{fontSize:11,color:TH.subtle}}>devfolio-latesh.vercel.app/u/{DEMO_SLUG}</span></div>
         <button onClick={()=>{navigator.clipboard.writeText(`${window.location.origin}/u/${DEMO_SLUG}`).catch(()=>{});setCopied(true);setTimeout(()=>setCopied(false),2000);}} style={{background:TH.accent,border:"none",borderRadius:20,padding:"5px 14px",cursor:"pointer",color:"#fff",fontFamily:"Georgia,serif",fontSize:12}}>{copied?"✓ Saved!":"Copy link"}</button>
       </div>
       <div style={{maxWidth:640,margin:"0 auto",padding:"32px 20px 80px",position:"relative",zIndex:1}}>
@@ -1331,7 +1331,7 @@ function Portfolio({go, slug, loggedIn=false}){
     <div style={{minHeight:"100vh",background:TH.bg,color:TH.text,fontFamily:TH.font}}>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"12px 20px",borderBottom:`1px solid ${TH.navBorder}`,position:"sticky",top:0,background:TH.glass?"rgba(255,255,255,0.04)":TH.nav,backdropFilter:TH.glass?"blur(20px)":"none",zIndex:50}}>
         <button className="btn btn-ghost btn-sm" onClick={()=>go(loggedIn?"dashboard":"landing")}>← Back</button>
-        <div style={{fontFamily:"Syne,sans-serif",fontWeight:700,fontSize:11,color:TH.subtle}}>devfolio.app/u/{DEMO_SLUG}</div>
+        <div style={{fontFamily:"Syne,sans-serif",fontWeight:700,fontSize:11,color:TH.subtle}}>devfolio-latesh.vercel.app/u/{DEMO_SLUG}</div>
         <button className="btn btn-outline btn-sm" onClick={()=>{navigator.clipboard.writeText(`${window.location.origin}/u/${DEMO_SLUG}`).catch(()=>{});setCopied(true);setTimeout(()=>setCopied(false),2000);}}>
           {copied?"✓ Copied!":"Copy link"}
         </button>
@@ -2059,9 +2059,9 @@ function Dashboard({go}){
               <div style={{fontSize:11,color:T.subtle,marginBottom:12}}>Share this in your resume, LinkedIn bio, and GitHub profile.</div>
               <div style={{display:"flex",gap:8}}>
                 <div style={{flex:1,padding:"10px 13px",border:`1.5px solid ${T.black}`,borderRadius:11,fontSize:12,background:T.fog,fontFamily:"monospace"}}>
-                  devfolio.app/u/{p.slug||"..."}
+                  devfolio-latesh.vercel.app/u/{p.slug||"..."}
                 </div>
-                <button className="btn btn-outline" onClick={()=>{navigator.clipboard.writeText(`devfolio.app/u/${p.slug}`).catch(()=>{});show("Link copied!");}}>Copy</button>
+                <button className="btn btn-outline" onClick={()=>{navigator.clipboard.writeText(`devfolio-latesh.vercel.app/u/${p.slug}`).catch(()=>{});show("Link copied!");}}>Copy</button>
               </div>
             </div>
 
@@ -2177,7 +2177,7 @@ function PrivateProfilePage({go,slug}) {
       <div style={{textAlign:'center',maxWidth:500,background:'#fff',padding:60,borderRadius:20,boxShadow:'0 20px 60px rgba(0,0,0,0.1)'}}>
         <div style={{fontSize:80,marginBottom:20}}>🔒</div>
         <h1 style={{fontSize:28,fontWeight:700,color:'#1a202c',marginBottom:16}}>This Profile is Private</h1>
-        <p style={{fontSize:16,color:'#718096',lineHeight:1.6,marginBottom:32}}>The owner of <strong>devfolio.app/u/{slug}</strong> has set their profile to private.</p>
+        <p style={{fontSize:16,color:'#718096',lineHeight:1.6,marginBottom:32}}>The owner of <strong>devfolio-latesh.vercel.app/u/{slug}</strong> has set their profile to private.</p>
         <div style={{display:'flex',gap:12,justifyContent:'center'}}>
           <button onClick={()=>go('landing')} style={{background:'#667eea',color:'#fff',border:'none',padding:'12px 24px',fontSize:15,fontWeight:600,borderRadius:8,cursor:'pointer'}}>Go Home</button>
           <button onClick={()=>go('login')} style={{background:'#fff',color:'#667eea',border:'2px solid #667eea',padding:'12px 24px',fontSize:15,fontWeight:600,borderRadius:8,cursor:'pointer'}}>Create Your Profile</button>
