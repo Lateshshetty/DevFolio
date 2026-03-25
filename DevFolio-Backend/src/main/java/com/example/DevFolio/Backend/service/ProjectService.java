@@ -38,9 +38,10 @@ public class ProjectService {
 
         String email=oAuth2User.getAttribute("email");
 
-        String name=oAuth2User.getAttribute("name");
+
 
         if(email==null && provider.equals("github")){
+            String name=oAuth2User.getAttribute("name");
             email=name+"@github";
         }
 
