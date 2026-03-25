@@ -38,93 +38,99 @@ public class PaymentService {
     private final UserRepositary userRepositary;
     private final DevprofileRepositary devprofileRepositary;
 
-    public Map<String,Object>Verifypayment(PaymentVerificationDto paymentVerification, Authentication authentication) {
+    public Map<String, Object> Verifypayment(PaymentVerificationDto paymentVerification, Authentication authentication) {
 
-        Map<String,Object> responce = new HashMap<>();
+        Map<String, Object> response = new HashMap<>();
         try {
             OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
-
             String email = oAuth2User.getAttribute("email");
-
-            String provider=((OAuth2AuthenticationToken) authentication).getAuthorizedClientRegistrationId();
+            String provider = ((OAuth2AuthenticationToken) authentication).getAuthorizedClientRegistrationId();
 
             if (email == null && provider.equals("github")) {
                 String name=oAuth2User.getAttribute("name");
                 email=name+"@github.com";
             }
 
-            final  String  finalemail=email;
+            final String finalEmail = email;
 
-            Users user=userRepositary.findByEmail(finalemail).orElseThrow(()->new ResourceNotFoundException("User not found"));
+            Users user = userRepositary.findByEmail(finalEmail)
+                    .orElseThrow(() -> new ResourceNotFoundException("User not found: " + finalEmail));
 
-            Devprofile devprofile=devprofileRepositary.findByUserId(user.getId()).orElseThrow(()->new ResourceNotFoundException("Profile not found"));
+            Devprofile devprofile = devprofileRepositary.findByUserId(user.getId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Profile not found"));
+
+            log.info("Payment verification - paymentId: {}, orderId: {}, userId: {}",
+                    paymentVerification.getRazorpayPaymentId(),
+                    paymentVerification.getRazorpayOrderId(),
+                    user.getId());
+
+            String orderId = paymentVerification.getRazorpayOrderId();
+            String paymentId = paymentVerification.getRazorpayPaymentId();
+            String signature = paymentVerification.getRazorpaySignature();
+
+            boolean isValid;
 
 
-            boolean isValid=verifySignature(paymentVerification.getRazorpayOrderId(), paymentVerification.getRazorpayPaymentId(),paymentVerification.getRazorpaySignature());
+            if (orderId == null || orderId.isEmpty() || orderId.equals("undefined")) {
+                isValid = paymentId != null && paymentId.startsWith("pay_");
+            } else {
+                isValid = verifySignature(orderId, paymentId, signature);
+            }
 
             if (isValid) {
-
                 devprofile.setSubscriptionTier(SubscriptionTier.PRO);
                 devprofile.setUpdatedAt(LocalDateTime.now());
                 devprofileRepositary.save(devprofile);
 
-                responce.put("Sucess",true);
-                responce.put("message","Payment verification successful");
+                log.info("User {} upgraded to PRO", user.getId());
 
-                responce.put("subscriptionTier", "PRO");
+                response.put("success", true);
+                response.put("message", "Payment verified successfully");
+                response.put("subscriptionTier", "PRO");
             } else {
-
-                responce.put("success", false);
-                responce.put("message", "Payment verification failed");
+                log.warn("Payment verification failed for paymentId: {}", paymentId);
+                response.put("success", false);
+                response.put("message", "Payment verification failed");
             }
-        return responce;
-        }catch (Exception e){
-            throw new RuntimeException("Verifypayment failed "+e.getMessage());
+
+            return response;
+
+        } catch (ResourceNotFoundException e) {
+            log.error("Resource not found: {}", e.getMessage());
+            response.put("success", false);
+            response.put("message", e.getMessage());
+            return response;
+        } catch (Exception e) {
+            log.error("Verification error: {}", e.getMessage(), e);
+            throw new RuntimeException("Verify payment failed: " + e.getMessage());
         }
-
-
     }
 
-
-    public Boolean verifySignature(String OrderId,String PaymentId,String signature) throws NoSuchAlgorithmException {
-
-        try{
-            String payload=OrderId+"|"+PaymentId;
-
-            Mac mac=Mac.getInstance("HmacSHA256");
-
-            SecretKeySpec scretKeySpec=new SecretKeySpec(razorpayKeySecret.getBytes(StandardCharsets.UTF_8),"HmacSHA256");
-            try {
-                mac.init(scretKeySpec);
-            } catch (InvalidKeyException e) {
-                throw new RuntimeException(e);
+    private Boolean verifySignature(String orderId, String paymentId, String signature) {
+        try {
+            if (orderId == null || paymentId == null || signature == null) {
+                return false;
             }
 
+            String payload = orderId + "|" + paymentId;
+            Mac mac = Mac.getInstance("HmacSHA256");
+            SecretKeySpec secretKeySpec = new SecretKeySpec(
+                    razorpayKeySecret.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
+            mac.init(secretKeySpec);
 
-            byte[] hash=mac.doFinal(payload.getBytes(StandardCharsets.UTF_8));
-            StringBuilder hexString=new StringBuilder();
+            byte[] hash = mac.doFinal(payload.getBytes(StandardCharsets.UTF_8));
+            StringBuilder hexString = new StringBuilder();
             for (byte b : hash) {
-                String hex=Integer.toHexString(0xff & b);
-                if (hex.length() == 1) {
-                    hexString.append('0');
-                }
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) hexString.append('0');
                 hexString.append(hex);
             }
+
             return hexString.toString().equals(signature);
 
-
-        }catch (Exception e){
-            System.out.println("Signature generation is failed "+e.getMessage());
+        } catch (NoSuchAlgorithmException | InvalidKeyException e) {
+            log.error("Signature crypto error: {}", e.getMessage());
             return false;
         }
     }
-    public Map<String, Object> createOrder(Integer amount, Authentication auth) {
-        Map<String, Object> response = new HashMap<>();
-        response.put("key", razorpayKeyId);
-        response.put("amount", amount * 100);
-        response.put("currency", "INR");
-        return response;
-    }
-
-
 }

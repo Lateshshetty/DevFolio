@@ -95,12 +95,6 @@ const api = {
     fetch(`${BASE}/api/projects/${id}/featured`, { method:"PUT", credentials:"include" })
       .then(r => { if(!r.ok) throw new Error(String(r.status)); }),
 
-  // ── Payment  POST /api/payment/create-order
-  createPaymentOrder: (amount) =>
-    fetch(`${BASE}/api/payment/create-order?amount=${amount}`, {
-      method:"POST", credentials:"include"
-    }).then(r => { if(!r.ok) throw new Error(String(r.status)); return r.json(); }),
-
   // ── Payment  POST /api/payment/verify
   verifyPayment: (body) =>
     fetch(`${BASE}/api/payment/verify`, {
@@ -2107,52 +2101,6 @@ function Dashboard({go}){
 }
 
 /* ══════════════════════════════════════════
-   RAZORPAY PAYMENT HELPER
-══════════════════════════════════════════ */
-const loadRazorpayScript = () => {
-  return new Promise((resolve) => {
-    if (window.Razorpay) {
-      resolve(true);
-      return;
-    }
-    const script = document.createElement('script');
-    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-    script.onload = () => {
-      console.log('✅ Razorpay SDK loaded');
-      resolve(true);
-    };
-    script.onerror = () => {
-      console.error('❌ Failed to load Razorpay SDK');
-      resolve(false);
-    };
-    document.body.appendChild(script);
-  });
-};
-
-const initiateRazorpayPayment = (amount, userDetails, onSuccess, onFailure) => {
-  if (!window.Razorpay) {
-    console.error('Razorpay SDK not loaded!');
-    onFailure(new Error('Razorpay SDK not loaded'));
-    return;
-  }
-
-  const options = {
-    key: RAZORPAY_KEY,
-    amount: amount * 100,
-    currency: 'INR',
-    name: 'DevFolio',
-    description: 'PRO Subscription',
-    handler: function (response) { onSuccess(response); },
-    prefill: { name: userDetails.name || '', email: userDetails.email || '' },
-    theme: { color: '#667eea' },
-    modal: { ondismiss: function() { onFailure(new Error('Payment cancelled')); } }
-  };
-  const rzp = new window.Razorpay(options);
-  rzp.on('payment.failed', function (response) { onFailure(response.error); });
-  rzp.open();
-};
-
-/* ══════════════════════════════════════════
    404 NOT FOUND PAGE
 ══════════════════════════════════════════ */
 function NotFoundPage({go}) {
@@ -2294,51 +2242,61 @@ export default function App(){
 
   const handleUpgradeToPro = async () => {
     try {
-      // Load Razorpay SDK if not already loaded
-      const isLoaded = await loadRazorpayScript();
-      if (!isLoaded) {
-        alert('Could not load payment system. Please check your internet connection and try again.');
+      if (!window.Razorpay) {
+        alert('Payment system not loaded. Please refresh the page and try again.');
         return;
       }
 
       const profile = userProfile || await api.getMyProfile();
 
-      initiateRazorpayPayment(
-        1,
-        { name: profile.name, email: profile.email || 'fortesting997@gmail.com' },
-        async (paymentResponse) => {
+      const options = {
+        key: RAZORPAY_KEY,
+        amount: 100, // ₹1 in paise
+        currency: 'INR',
+        name: 'DevFolio',
+        description: 'PRO Subscription',
+        prefill: {
+          name: profile.name || '',
+          email: profile.email || '',
+        },
+        theme: { color: '#FF4D3D' },
+        handler: async function (paymentResponse) {
           try {
-            console.log('✅ Payment successful! Response:', paymentResponse);
-            console.log('🔄 Verifying payment with backend...');
-
+            console.log('Payment successful:', paymentResponse);
             const verification = await api.verifyPayment({
               razorpayPaymentId: paymentResponse.razorpay_payment_id,
-              razorpayOrderId: paymentResponse.razorpay_order_id,
-              razorpaySignature: paymentResponse.razorpay_signature
+              razorpayOrderId: paymentResponse.razorpay_order_id || '',
+              razorpaySignature: paymentResponse.razorpay_signature || '',
             });
-
-            console.log('📝 Verification response:', verification);
-
-            if (verification.success) {
-              console.log('✅ Payment verified! Upgrading to PRO...');
-              await api.updateProfile({ subscriptionTier: 'PRO' });
-              setUserProfile({...profile, subscriptionTier: 'PRO'});
-              console.log('🎉 User upgraded to PRO successfully!');
+            console.log('Verification result:', verification);
+            if (verification.success === true) {
+              const updatedProfile = await api.getMyProfile();
+              setUserProfile(updatedProfile);
               setPage('payment-success');
             } else {
-              console.error('❌ Payment verification failed');
+              console.error('Verification failed:', verification.message);
               setPage('payment-failed');
             }
           } catch (error) {
-            console.error('❌ Verification error:', error);
+            console.error('Verification error:', error);
             setPage('payment-failed');
           }
         },
-        (error) => {
-          console.error('Payment error:', error);
-          setPage('payment-failed');
-        }
-      );
+        modal: {
+          ondismiss: function () {
+            // User closed the modal — do nothing
+            console.log('Payment modal closed by user');
+          },
+        },
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.on('payment.failed', function (response) {
+        console.error('Payment failed:', response.error);
+        setPage('payment-failed');
+      });
+      rzp.open();
+
     } catch (error) {
       console.error('Upgrade error:', error);
       alert('Failed to initiate payment. Please try again.');
