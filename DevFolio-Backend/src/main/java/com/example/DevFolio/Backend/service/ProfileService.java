@@ -44,10 +44,10 @@ public class ProfileService {
         String provider=((OAuth2AuthenticationToken) auth).getAuthorizedClientRegistrationId();
 
         String email=oAuth2User.getAttribute("email");
+        String name=oAuth2User.getAttribute("name");
 
         if(email==null && provider.equals("github")){
-            String login=oAuth2User.getAttribute("login");
-            email=login+"@github";
+            email=name+"@github";
         }
 
 
@@ -335,10 +335,10 @@ public class ProfileService {
         String provider=((OAuth2AuthenticationToken) authentication).getAuthorizedClientRegistrationId();
 
         String email=oAuth2User.getAttribute("email");
+        String name=oAuth2User.getAttribute("name");
 
         if(email==null && provider.equals("github")){
-            String login=oAuth2User.getAttribute("login");
-            email=login+"@github";
+            email=name+"@github";
         }
 
         Users user= userRepositary.findByEmail(email).orElseThrow(()->new ResourceNotFoundException("User not found"));

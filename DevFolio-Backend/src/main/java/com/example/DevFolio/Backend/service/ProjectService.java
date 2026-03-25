@@ -41,7 +41,7 @@ public class ProjectService {
         String name=oAuth2User.getAttribute("name");
 
         if(email==null && provider.equals("github")){
-            email=name+"@github.com";
+            email=name+"@github";
         }
 
         Users user=userRepositary.findByEmail(email).orElseThrow(()->new RuntimeException("User not found"));

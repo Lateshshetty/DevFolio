@@ -48,7 +48,7 @@ public class PaymentService {
 
             if (email == null && provider.equals("github")) {
                 String name=oAuth2User.getAttribute("name");
-                email=name+"@github.com";
+                email=name+"@github";
             }
 
             final String finalEmail = email;
