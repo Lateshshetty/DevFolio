@@ -47,8 +47,9 @@ public class PaymentService {
             String provider = ((OAuth2AuthenticationToken) authentication).getAuthorizedClientRegistrationId();
 
             if (email == null && provider.equals("github")) {
-                String name=oAuth2User.getAttribute("name");
-                email=name+"@github";
+                String name = oAuth2User.getAttribute("name");
+                String login = oAuth2User.getAttribute("login");
+                email = (name != null ? name : login) + "@github";
             }
 
             final String finalEmail = email;

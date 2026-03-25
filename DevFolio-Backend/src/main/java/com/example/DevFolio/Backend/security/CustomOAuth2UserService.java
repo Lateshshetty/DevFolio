@@ -41,11 +41,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         OAuth2User OAuthuser=super.loadUser(userreq);
 
         String email=OAuthuser.getAttribute("email");
-        String name=OAuthuser.getAttribute("name");
-       String provider=userreq.getClientRegistration().getRegistrationId();
+        String name = OAuthuser.getAttribute("name");
+        String login = OAuthuser.getAttribute("login");       String provider=userreq.getClientRegistration().getRegistrationId();
         if (email == null && provider.equals("github")) {
-            email = name + "@github";
-        }
+            email = (name != null ? name : login) + "@github";        }
         final String finalemail=email;
 
 

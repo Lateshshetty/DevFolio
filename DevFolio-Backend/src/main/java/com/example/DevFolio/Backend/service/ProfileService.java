@@ -46,8 +46,9 @@ public class ProfileService {
         String email=oAuth2User.getAttribute("email");
 
         if(email==null && provider.equals("github")){
-            String name=oAuth2User.getAttribute("name");
-            email=name+"@github";
+            String name = oAuth2User.getAttribute("name");
+            String login = oAuth2User.getAttribute("login");
+            email = (name != null ? name : login) + "@github";
         }
 
 
@@ -94,8 +95,9 @@ public class ProfileService {
             String email = oAuth2User.getAttribute("email");
             String provider=((OAuth2AuthenticationToken) auth).getAuthorizedClientRegistrationId();
             if(email==null && provider.equals("github")){
-                String name=oAuth2User.getAttribute("name");
-                email=name+"@github";
+                String name = oAuth2User.getAttribute("name");
+                String login = oAuth2User.getAttribute("login");
+                email = (name != null ? name : login) + "@github";
             }
             Users user = userRepositary.findByEmail(email)
                     .orElse(null);
@@ -135,8 +137,9 @@ public class ProfileService {
         String email=oAuth2User.getAttribute("email");
 
         if(email==null && provider.equals("github")){
-            String name=oAuth2User.getAttribute("name");
-            email=name+"@github";
+            String name = oAuth2User.getAttribute("name");
+            String login = oAuth2User.getAttribute("login");
+            email = (name != null ? name : login) + "@github";
         }
 
 
@@ -206,8 +209,9 @@ public class ProfileService {
         String email=oAuth2User.getAttribute("email");
 
         if(email==null && provider.equals("github")){
-            String name=oAuth2User.getAttribute("name");
-            email=name+"@github";
+            String name = oAuth2User.getAttribute("name");
+            String login = oAuth2User.getAttribute("login");
+            email = (name != null ? name : login) + "@github";
         }
 
         Users user=userRepositary.findByEmail(email).orElseThrow(()->new ResourceNotFoundException("User not found"));
@@ -315,8 +319,9 @@ public class ProfileService {
         String email=oAuth2User.getAttribute("email");
 
         if(email==null && provider.equals("github")){
-            String name=oAuth2User.getAttribute("name");
-            email=name+"@github";
+            String name = oAuth2User.getAttribute("name");
+            String login = oAuth2User.getAttribute("login");
+            email = (name != null ? name : login) + "@github";
         }
 
         Users user= userRepositary.findByEmail(email).orElseThrow(()->new ResourceNotFoundException("User not found"));
@@ -336,10 +341,11 @@ public class ProfileService {
         String provider=((OAuth2AuthenticationToken) authentication).getAuthorizedClientRegistrationId();
 
         String email=oAuth2User.getAttribute("email");
-        String name=oAuth2User.getAttribute("name");
 
         if(email==null && provider.equals("github")){
-            email=name+"@github";
+            String name = oAuth2User.getAttribute("name");
+            String login = oAuth2User.getAttribute("login");
+            email = (name != null ? name : login) + "@github";
         }
 
         Users user= userRepositary.findByEmail(email).orElseThrow(()->new ResourceNotFoundException("User not found"));
